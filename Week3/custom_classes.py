@@ -42,3 +42,15 @@ class DVD(MediaItem):
             print(self.CARE_REMINDER)
         return result
     
+
+class LibraryCollection:
+    def __init__(self):
+        self.items = []
+
+    def add_item(self, item):
+        if not isinstance(item, MediaItem):
+            raise TypeError("Only MediaItem objects can be added.")
+        self.items.append(item)
+
+    def list_available(self):
+        return [item.title for item in self.items if item.is_available]
