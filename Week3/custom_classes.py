@@ -70,7 +70,7 @@ class DVD(MediaItem):
     def __init__(self, title, author, duration, is_available=True):
         """Create a DVD with a duration."""
         super().__init__(title, author, is_available)
-        self.duration = duration  # in minutes
+        self.duration = duration  # we keep this in minutes
 
     def checkout(self):
         """Check out the DVD and remind the borrower to handle it carefully.
@@ -78,9 +78,9 @@ class DVD(MediaItem):
         Returns:
             str: The same result as MediaItem.checkout().
         """
-        # Reuse the parent logic so DVD stays in sync if MediaItem.checkout changes.
+        # We call the parent's checkout instead of copying it, so if MediaItem changes, DVD changes too.
         result = super().checkout()
-        # Compare with the constant, not a literal string, so a message change cannot break this check.
+        # We compare with the constant, not the text itself, so changing the message won't break this.
         if result == self.CHECKOUT_SUCCESS:
             print(self.CARE_REMINDER)
         return result
@@ -99,7 +99,7 @@ class LibraryCollection:
         Raises:
             TypeError: If item is not a MediaItem.
         """
-        # Fail early so list_available() never meets an object without is_available.
+        # We block wrong objects here, otherwise list_available() would crash when it looks for is_available.
         if not isinstance(item, MediaItem):
             raise TypeError("Only MediaItem objects can be added.")
         self.items.append(item)
